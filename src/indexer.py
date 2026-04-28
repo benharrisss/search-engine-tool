@@ -1,26 +1,52 @@
-# Imports
+import re
+import json
+
 
 def build_index(pages):
-    # Placeholder for building index logic
-    print(f"Building index for pages: {pages}")
+    inverted_index = {}
+    
+    for page in pages:
+        page_number = page["page"]
+        text = page["text"]
+
+        words = process_text(text)
+
+        for position, word in enumerate(words):
+            # Update the inverted index for each word
+            update_index(inverted_index, word, page_number, position)
+
+    return inverted_index
 
 
 def process_text(text):
-    # Placeholder for processing text logic
-    print(f"Processing text: {text}")
+    # lowercase
+    text = text.lower()
+
+    # remove punctuation
+    text = re.sub(r'[^\w\s]', '', text)
+
+    # split into words
+    words = text.split()
+
+    return words
 
 
 def update_index(index, word, page, position):
-    # Placeholder for updating index logic
-    print(f"Updating index for word: {word}, page: {page}, position: {position}")
+    if word not in index:
+        index[word] = {}
+    
+    if page not in index[word]:
+        index[word][page] = {"frequency": 0, "positions": []}
+
+    index[word][page]["frequency"] += 1
+    index[word][page]["positions"].append(position)
 
 
 def save_index(index, filename):
-    # Placeholder for saving index logic
-    print(f"Saving index to file: {filename}")
+    with open(filename, 'w') as f:
+        json.dump(index, f)
 
 
 def load_index(filename):
-    # Placeholder for loading index logic
-    print(f"Loading index from file: {filename}")
-
+    with open(filename, 'r') as f:
+        return json.load(f)

@@ -1,12 +1,15 @@
 from crawler import crawl_website
+from indexer import build_index
 
 
 def main():
     # Tests that crawler.py works as expected
     pages = crawl_website("http://quotes.toscrape.com/")
-    print(len(pages))
-    print(pages[0])
+    index = build_index(pages)
 
+    # Example of printing the index for the word "life"
+    print(index["life"])
+    
 
 def handle_build():
     # Placeholder for handling build logic
@@ -17,8 +20,6 @@ def handle_build():
 def handle_load():
     # Placeholder for handling load logic
     print("Handling load command...")
-    index = load_index("index.txt")
-    print(f"Loaded index: {index}")
 
 
 def handle_print(command_args):
