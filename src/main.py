@@ -1,5 +1,6 @@
 from crawler import crawl_website
 from indexer import build_index
+from search import print_word, find_words
 
 
 def main():
@@ -7,9 +8,11 @@ def main():
     pages = crawl_website("http://quotes.toscrape.com/")
     index = build_index(pages)
 
-    # Example of printing the index for the word "life"
-    print(index["life"])
-    
+    print_word(index, "life")
+    find_words(index, ["life", "love"])
+    find_words(index, ["nonexistentword"])
+    find_words(index, [])
+
 
 def handle_build():
     # Placeholder for handling build logic
@@ -33,7 +36,6 @@ def handle_find(command_args):
 
 
 def parse_command(command):
-    # Placeholder for parsing command logic
     print(f"Parsing command: {command}")
     command_parts = command.split()
     command_name = command_parts[0]
