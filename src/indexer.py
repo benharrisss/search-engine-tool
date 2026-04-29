@@ -43,10 +43,18 @@ def update_index(index, word, page, position):
 
 
 def save_index(index, filename):
-    with open(filename, 'w') as f:
-        json.dump(index, f)
+    try:
+        with open(filename, 'w') as f:
+            json.dump(index, f)
+    except Exception as e:
+        print(f"Error: Failed to save index to {filename}: {e}")
+
 
 
 def load_index(filename):
-    with open(filename, 'r') as f:
-        return json.load(f)
+    try:
+        with open(filename, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Error: Failed to load index from {filename}: {e}")
+        return {}

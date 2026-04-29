@@ -32,7 +32,7 @@ def print_word(index, word):
     if word:
         word = normalise_query([word])[0]
     else:
-        print("No word provided for print command.")
+        print("Error: No word provided for print command.")
         return
 
     if word not in index:
@@ -49,7 +49,7 @@ def find_words(index, words):
     words = normalise_query(words)
 
     if not words:
-        print("No words provided for find command.")
+        print("Error: No words provided for find command.")
         return
 
     page_sets = []

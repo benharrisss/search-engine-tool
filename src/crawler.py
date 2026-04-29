@@ -16,7 +16,7 @@ def crawl_website(url):
         
         html_content = fetch_page_content(current_url)
         if html_content is None:
-            print(f"Failed to fetch content from {current_url}")
+            print(f"Error: Failed to fetch content from {current_url}")
             break
         
         text, next_url = parse_page_content(html_content)
@@ -42,7 +42,7 @@ def fetch_page_content(url):
         response.raise_for_status()
         return response.text
     except requests.RequestException as e:
-        print(f"Error fetching {url}: {e}")
+        print(f"Error: Failed to fetch {url}: {e}")
         return None
 
 
