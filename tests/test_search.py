@@ -1,4 +1,14 @@
-from search import get_pages_for_word, print_word, find_words
+from search import get_pages_for_word, print_word, find_words, normalise_query
+
+
+def test_normalise_query():
+    assert normalise_query(["Hello"]) == ["hello"]
+    assert normalise_query(["HELLO"]) == ["hello"]
+    assert normalise_query(["Hello!"]) == ["hello"]
+
+
+def test_normalise_query_drops_punctuation_and_empty_tokens():
+    assert normalise_query(["", "!!", "Hello", "World!"]) == ["hello", "world"]
 
 
 def test_get_pages_for_word():
@@ -34,19 +44,12 @@ def test_find_word_not_found():
     assert find_words(index, ["hello"]) == None
 
 
-def test_empty_query():
+def test_find_word_empty_query():
     index = {
         "hello": {"1": {"frequency": 1, "positions": [0]}},
         "world": {"1": {"frequency": 1, "positions": [1]}}
     }
     assert find_words(index, []) == None
-
-
-def test_print_word(capsys):
-    index = {"hello": {"1": {"frequency": 1, "positions": [0]}}}
-    print_word(index, "hello")
-    captured = capsys.readouterr()
-    assert "hello" in captured.out.lower()
 
 
 def test_case_insensitive_search():
@@ -59,3 +62,24 @@ def test_search_with_punctuation():
     index = {"hello": {"1": {"frequency": 1, "positions": [0]}}}
     result = find_words(index, ["hello!"])
     assert result == ["1"]
+
+
+def test_print_word(capsys):
+    index = {"hello": {"1": {"frequency": 1, "positions": [0]}}}
+    print_word(index, "hello")
+    captured = capsys.readouterr()
+    assert "hello" in captured.out.lower()
+
+
+def test_print_word_not_found(capsys):
+    index = {"hello": {"1": {"frequency": 1, "positions": [0]}}}
+    print_word(index, "world")
+    captured = capsys.readouterr().out.lower()
+    assert "not found" in captured
+
+
+def test_print_word_empty_query(capsys):
+    index = {"hello": {"1": {"frequency": 1, "positions": [0]}}}
+    print_word(index, "")
+    captured = capsys.readouterr().out.lower()
+    assert "no word provided" in captured

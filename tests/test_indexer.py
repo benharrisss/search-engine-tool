@@ -1,4 +1,6 @@
-from indexer import build_index, process_text, update_index
+import json
+
+from indexer import build_index, process_text, update_index, save_index, load_index
 
 
 def test_process_text_basic():
@@ -83,3 +85,37 @@ def test_update_index_existing_word_new_page():
     }
     assert index == expected_index
 
+
+def test_update_index_existing_word_same_page():
+    index = {"hello": {1: {"frequency": 1, "positions": [0]}}}
+    update_index(index, "hello", 1, 5)
+    assert index["hello"][1]["frequency"] == 2
+    assert index["hello"][1]["positions"] == [0, 5]
+
+
+def test_save_index(tmp_path):
+    path = tmp_path / "index.json"
+    index = {
+        "hello": {
+            "1": {"frequency": 1, "positions": [0]},
+            "2": {"frequency": 1, "positions": [0]}
+        }
+    }
+    save_index(index, str(path))
+    assert json.loads(path.read_text()) == index
+
+
+def test_load_index(tmp_path):
+    path = tmp_path / "index.json"
+    index = {"hello": {"1": {"frequency": 1, "positions": [0]}}}
+    path.write_text(json.dumps(index))
+    loaded_index = load_index(str(path))
+    assert loaded_index == index
+
+
+def test_load_index_missing_file(tmp_path, capsys):
+    path = tmp_path / "nonexistent.json"
+    loaded_index = load_index(str(path))
+    out = capsys.readouterr().out.lower()
+    assert loaded_index == {}
+    assert "failed to load" in out
