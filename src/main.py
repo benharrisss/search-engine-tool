@@ -3,6 +3,7 @@ from indexer import build_index, save_index, load_index
 from search import print_word, find_words
 
 INDEX_FILENAME = "data/index.json"
+TARGET_URL = "https://quotes.toscrape.com/"
 
 
 def main():
@@ -18,7 +19,7 @@ def main():
 def handle_build():
     print("Building index...")
 
-    pages = crawl_website("http://quotes.toscrape.com/")
+    pages = crawl_website(TARGET_URL)
     index = build_index(pages)
     save_index(index, INDEX_FILENAME)
 
@@ -55,7 +56,7 @@ def handle_find(index, command_parts):
         return
 
     if len(command_parts) < 2:
-        print("Error: Find command requires more than one word argument.")
+        print("Error: Find command requires at least one word argument.")
         return
 
     words = command_parts[1:]
