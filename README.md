@@ -93,6 +93,11 @@ Searches for pages containing one or more inputted words.
 
 ## Testing Instructions:
 
+### Set the path:
+```bash
+export PYTHONPATH=src
+```
+
 ### Running the test suite with pytest:
 Again from the project root, you will want to run:
 ```bash
