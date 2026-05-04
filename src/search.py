@@ -19,16 +19,19 @@ def normalise_query(words):
 
 
 def get_pages_for_word(index, word):
+    # Return the set of pages where the word appears
     if word in index:
         key_set = set()
         for key in index[word]:
             key_set.add(key)
         return key_set
+    # If the word is not in the index, return an empty set
     else:
         return set()
 
 
 def print_word(index, word):
+    # Normalise the word before looking it up in the index
     if word:
         word = normalise_query([word])[0]
     else:
@@ -41,11 +44,13 @@ def print_word(index, word):
 
     print(f"Inverted index for '{word}':")
 
+    # Print the page number, frequency, and positions for each page where the word appears
     for page, data in index[word].items():
         print(f"Page {page}: Frequency = {data['frequency']}, Positions = {data['positions']}")
 
 
 def find_words(index, words):
+    # Again, normalise the words before looking them up in the index
     words = normalise_query(words)
 
     if not words:
@@ -61,6 +66,7 @@ def find_words(index, words):
             print(f"Word '{word}' not found in index. No results.")
             return
 
+        # Add the set of pages for this word to the list of page sets
         page_sets.append(pages)
 
     # Intersect the sets of pages for all words
@@ -71,7 +77,7 @@ def find_words(index, words):
         return []
 
     result_pages = sorted(result_pages)
-
+    # Print the pages that contain all the specified words
     print(f"Pages containing {' and '.join(words)}: {result_pages}")
 
     return result_pages

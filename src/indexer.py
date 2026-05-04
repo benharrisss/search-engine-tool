@@ -6,13 +6,14 @@ def build_index(pages):
     inverted_index = {}
     
     for page in pages:
+        # Get the page number and text from the page dictionary
         page_number = page["page"]
         text = page["text"]
 
         words = process_text(text)
 
+        # Enumerate over all words in the page to get their position and update the index
         for position, word in enumerate(words):
-            # Update the inverted index for each word
             update_index(inverted_index, word, page_number, position)
 
     return inverted_index
@@ -38,23 +39,28 @@ def update_index(index, word, page, position):
     if page not in index[word]:
         index[word][page] = {"frequency": 0, "positions": []}
 
+    # Update the frequency and positions for the word on the given page
     index[word][page]["frequency"] += 1
     index[word][page]["positions"].append(position)
 
 
 def save_index(index, filename):
+    # Save the index to a JSON file
     try:
         with open(filename, 'w') as f:
             json.dump(index, f)
+            
     except Exception as e:
         print(f"Error: Failed to save index to {filename}: {e}")
 
 
 
 def load_index(filename):
+    # Load the index from a JSON file
     try:
         with open(filename, 'r') as f:
             return json.load(f)
+
     except Exception as e:
         print(f"Error: Failed to load index from {filename}: {e}")
         return {}
